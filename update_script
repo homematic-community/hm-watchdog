@@ -1,0 +1,35 @@
+#!/bin/sh
+
+ADDONNAME=hm-watchdog
+CONFIG_DIR=/usr/local/etc/config
+ADDON_DIR=/usr/local/addons/${ADDONNAME}
+RCD_DIR=${CONFIG_DIR}/rc.d
+WWW_DIR=${CONFIG_DIR}/addons/www/${ADDONNAME}
+
+# mount /usr/local if not already mounted
+mount | grep /usr/local 2>&1 >/dev/null
+if [ $? -eq 1 ]; then
+  mount /usr/local
+fi
+
+# create necessary directories
+mkdir -p ${ADDON_DIR}
+chmod 755 ${ADDON_DIR}
+mkdir -p ${RCD_DIR}
+chmod 755 ${RCD_DIR}
+
+# copy addon (common stuff)
+cp -af watchdog/* ${ADDON_DIR}/
+
+# copy startup script
+cp -af rc.d/* ${RCD_DIR}
+
+# copy www stuff
+cp -af www ${ADDON_DIR}/
+if [ ! -e ${WWW_DIR} ]; then
+  ln -sf ${ADDON_DIR}/www ${WWW_DIR}
+fi
+
+# synchronize filesystem before performing a reboot
+# afterwards
+sync
