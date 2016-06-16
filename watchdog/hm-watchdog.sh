@@ -45,7 +45,6 @@ ack_service()
 restart_service()
 {
   name=${1}
-  service=${2}
 
   # now check if this service is down already > MAX_THRESHOLD
   # and if so we do a reboot instead
@@ -60,9 +59,9 @@ restart_service()
   fi
 
   # restart the service
-  ${service} stop
+  /etc/init.d/S??${name} stop
   sleep 3
-  ${service} start
+  /etc/init.d/S??${name} start
 
   # lets write down which service actually failed.
   echo ${name} >>${STATUS_FILE}
@@ -77,7 +76,7 @@ restart_service()
 # check for the ReGaHss beast (ALL: /etc/init.d/S70ReGaHss)
 if [ $(ps | grep "/bin/ReGaHss " | grep -v grep | wc -l) -lt 1 ]; then
   # ReGaHss has crashed (as usual)
-  restart_service "ReGaHss" /etc/init.d/S??ReGaHss
+  restart_service "ReGaHss"
 else
   ack_service "ReGaHss"
 fi
@@ -86,7 +85,7 @@ fi
 if [ -e /etc/config/rfd.conf ] &&
    [ $(ps | grep "/bin/rfd " | grep -v grep | wc -l) -lt 1 ]; then
   # rfd is not running, restart it
-  restart_service "rfd" /etc/init.d/S??rfd
+  restart_service "rfd"
 else
   ack_service "rfd"
 fi
@@ -95,7 +94,7 @@ fi
 if [ -e /etc/config/hs485d.conf ] &&
    [ $(ps | grep "bin/hs485d " | grep -v grep | wc -l) -lt 1 ]; then
   # hs485d is not running, restart it
-  restart_service "hs485" /etc/init.d/S??hs485d
+  restart_service "hs485"
 else
   ack_service "hs485"
 fi
@@ -104,9 +103,9 @@ fi
 if [ -e /etc/config/ntpclient ] &&
    [ $(ps | grep "ntpclient" | grep -v grep | wc -l) -lt 1 ]; then
   # ntpclient is not running
-  restart_service "ntpclient" /etc/init.d/S??SetClock
+  restart_service "SetClock"
 else
-  ack_service "ntpclient"
+  ack_service "SetClock"
 fi
 
 # check syslogd/klogd (ALL: /etc/init.d/S01logging)
@@ -114,24 +113,24 @@ if [ -e /etc/config/syslog ] &&
    ( [ $(ps | grep "/sbin/syslogd" | grep -v grep | wc -l) -lt 1 ] ||
      [ $(ps | grep "/sbin/klogd" | grep -v grep | wc -l) -lt 1 ] ); then
   # syslogd/klogd not running
-  restart_service "syslogd" /etc/init.d/S??logging
+  restart_service "logging"
 else
-  ack_service "syslogd"
+  ack_service "logging"
 fi
 
 # check udevd (CCU2: /etc/init.d/S10udev)
 if [ $(grep -q "ccu2-ic200" /etc/config/rfd.conf; echo $?) -eq 0 ] &&
    [ $(ps | grep "/lib/udev/udevd" | grep -v grep | wc -l) -lt 1 ]; then
   # udevd is not running anymore
-  restart_service "udevd" /etc/init.d/S??udev
+  restart_service "udev"
 else
-  ack_service "udevd"
+  ack_service "udev"
 fi
 
 # check ifplugd (ALL: /etc/init.d/S45ifplugd)
 if [[ $(ps | grep "/usr/sbin/ifplugd" | grep -v grep | wc -l) -lt 1 ]]; then
   # ifplugd is not running anymore
-  restart_service "ifplugd" /etc/init.d/S??ifplugd
+  restart_service "ifplugd"
 else
   ack_service "ifplugd"
 fi
@@ -139,35 +138,24 @@ fi
 # check for ssdpd / eq3configcmd (CCU2: /etc/init.d/S50eq3configd)
 if [[ $(ps | grep "/bin/ssdpd" | grep -v grep | wc -l) -lt 1 ]]; then
   # ssdpd is not running anymore
-  restart_service "ssdpd" /etc/init.d/S??eq3configd
+  restart_service "eq3configd"
 else
-  ack_service "ssdpd"
+  ack_service "eq3configd"
 fi
 
-# check for HMIPServer vs.HMServer (Firmware 2.17.5+)
-if [[ -e /etc/crRFD.conf ]]; then
-  # check HMIPServer (Firmware >= 2.17.15: /etc/init.d/S62HMServer)
-  if [[ $(ps | grep "/opt/HMServer/HMIPServer.jar" | grep -v grep | wc -l) -lt 1 ]]; then
-    # HMIPServer.jar not running
-    restart_service "HMIPServer" /etc/init.d/S??HMServer
-  else
-    ack_service "HMIPServer"
-  fi
+# check for HMIPServer (Firmware >= 2.17.15) or HMServer
+if [[ $(ps | grep -E "/opt/HMServer/HMI?P?Server\.jar" | grep -v grep | wc -l) -lt 1 ]]; then
+  # HMServer.jar not running
+  restart_service "HMServer"
 else
-  # check HMServer (Firmware < 2.17.15: /etc/init.d/S61HMServer)
-  if [[ $(ps | grep "/opt/HMServer/HMServer.jar" | grep -v grep | wc -l) -lt 1 ]]; then
-    # HMServer.jar not running
-    restart_service "HMServer" /etc/init.d/S??HMServer
-  else
-    ack_service "HMServer"
-  fi
+  ack_service "HMServer"
 fi
 
 # check multimacd (CCU2: /etc/init.d/S60multimacd)
 if [ -e /etc/config/multimacd.conf ] &&
    [ $(ps | grep "/bin/multimacd" | grep -v grep | wc -l) -lt 1 ]; then
   # multimacd is not running
-  restart_service "multimacd" /etc/init.d/S??multimacd
+  restart_service "multimacd"
 else
   ack_service "multimacd"
 fi
@@ -176,7 +164,7 @@ fi
 if [ -e /etc/lighttpd/lighttpd.conf ] &&
    [ $(ps | grep "/usr/sbin/lighttpd" | grep -v grep | wc -l) -lt 1 ]; then
   # multimacd is not running
-  restart_service "lighttpd" /etc/init.d/S??lighttpd
+  restart_service "lighttpd"
 else
   ack_service "lighttpd"
 fi
@@ -185,7 +173,7 @@ fi
 if [ -e /dev/watchdog ]; then
   if [ $(ps | grep "/dev/watchdog" | grep -v grep | wc -l) -lt 1 ]; then
     # watch is not running
-    restart_service "watchdog" /etc/init.d/S??watchdog
+    restart_service "watchdog"
   else
     ack_service "watchdog"
   fi
@@ -203,7 +191,7 @@ fi
 if [ -e /usr/local/addons/cuxd ] &&
    [ $(ps | grep "/usr/local/addons/cuxd/cuxd" | grep -v grep | wc -l) -lt 1 ]; then
   # cuxd is not running
-  restart_service "cuxd" /etc/init.d/S??cuxd
+  restart_service "cuxd"
 else
   ack_service "cuxd"
 fi
