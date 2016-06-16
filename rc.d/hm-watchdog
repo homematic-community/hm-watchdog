@@ -11,7 +11,7 @@ case "$1" in
     # add our cronjob definitions so that hm-watchdog is executed
     # every minute
     if ! grep -Fq "${ADDONDIR}/hm-watchdog.sh" /usr/local/crontabs/root; then
-      (crontab -l ; echo "*/1 * * * * ${ADDONDIR}/hm-watchdog.sh 2>&1 >/dev/null") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -
+      (crontab -l ; echo "*/3 * * * * ${ADDONDIR}/hm-watchdog.sh 2>&1 >/dev/null") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -
     fi
     ;;
 
@@ -22,7 +22,6 @@ case "$1" in
     echo "Version: $(cat ${WWWDIR}/VERSION)"
     echo "Name: hm-watchdog"
     echo "Operations: uninstall"
-    echo "Config-Url: /addons/${ADDONNAME}/"
     echo "Update: /addons/${ADDONNAME}/update-check.cgi"
     ;;
 

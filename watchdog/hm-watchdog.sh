@@ -9,8 +9,26 @@
 # Copyright (c) 2015-2016 Jens Maus <mail@jens-maus.de>
 #
 
-STATUS_FILE=/var/run/hm-watchdog.tmp
-MAX_THRESHOLD=3
+ADDONNAME=hm-watchdog
+ADDONDIR=/usr/local/addons/${ADDONNAME}
+STATUS_FILE=/var/run/${ADDONNAME}.tmp
+MAX_THRESHOLD=2
+
+notify_user()
+{
+  notify_text="${1}"
+
+  # check if a rega-based notify script exists and if so we send it to tclrega.exe
+  # for execution
+  if [ -e ${ADDONDIR}/notify.rega ]; then
+    # lets load the user configured rega script and replace "${notify_text}" with 
+    # the supplied text in this function.
+    postbody=$(cat ${ADDONDIR}/notify.rega | sed -e "s/NOTIFY_TXT/${notify_text}/")
+    if [ -n "${postbody}" ]; then
+      wget -q -O - --post-data "${postbody}" "http://127.0.0.1:8181/tclrega.exe"
+    fi
+  fi
+}
 
 ack_service()
 {
@@ -31,9 +49,12 @@ restart_service()
 
   # now check if this service is down already > MAX_THRESHOLD
   # and if so we do a reboot instead
-  if [ -e ${STATUS_FILE} ] &&
-     [ $(grep "^${name}\$" ${STATUS_FILE} | wc -l) -gt ${MAX_THRESHOLD} ]; then
-    /usr/bin/logger -t hm-watchdog -p err "${name} service down for >${MAX_THRESHOLD} iterations. Rebooting CCU system" 2>&1 >/dev/null
+  if [ -f ${STATUS_FILE} ] &&
+     [ $(grep "^${name}" ${STATUS_FILE} | wc -l) -gt ${MAX_THRESHOLD} ]; then
+    # lets notify the user
+    notify_user "hm-watchdog: CCU restarted due to service ${name} down >${MAX_THRESHOLD} times."
+
+    /usr/bin/logger -t hm-watchdog -p err "${name} service down for >${MAX_THRESHOLD} iterations. Rebooting CCU" 2>&1 >/dev/null
     /sbin/reboot
     exit 1
   fi
@@ -48,12 +69,15 @@ restart_service()
 
   msg=$(/usr/bin/logger -s -t hm-watchdog -p warn "${name} restarted" 2>&1)
   echo "$(date +'%Y-%m-%d %T') - ${msg}" >>/var/log/hm-watchdog.log
+
+  # lets notify the user
+  notify_user "hm-watchdog: ${name} restarted"
 }
 
 # check for the ReGaHss beast (ALL: /etc/init.d/S70ReGaHss)
 if [ $(ps | grep "/bin/ReGaHss " | grep -v grep | wc -l) -lt 1 ]; then
   # ReGaHss has crashed (as usual)
-  restart_service "ReGaHss" /etc/init.d/S70ReGaHss
+  restart_service "ReGaHss" /etc/init.d/S??ReGaHss
 else
   ack_service "ReGaHss"
 fi
@@ -62,7 +86,7 @@ fi
 if [ -e /etc/config/rfd.conf ] &&
    [ $(ps | grep "/bin/rfd " | grep -v grep | wc -l) -lt 1 ]; then
   # rfd is not running, restart it
-  restart_service "rfd" /etc/init.d/S60rfd
+  restart_service "rfd" /etc/init.d/S??rfd
 else
   ack_service "rfd"
 fi
@@ -71,7 +95,7 @@ fi
 if [ -e /etc/config/hs485d.conf ] &&
    [ $(ps | grep "bin/hs485d " | grep -v grep | wc -l) -lt 1 ]; then
   # hs485d is not running, restart it
-  restart_service "hs485" /etc/init.d/S49hs485d
+  restart_service "hs485" /etc/init.d/S??hs485d
 else
   ack_service "hs485"
 fi
@@ -80,7 +104,7 @@ fi
 if [ -e /etc/config/ntpclient ] &&
    [ $(ps | grep "ntpclient" | grep -v grep | wc -l) -lt 1 ]; then
   # ntpclient is not running
-  restart_service "ntpclient" /etc/init.d/S50SetClock
+  restart_service "ntpclient" /etc/init.d/S??SetClock
 else
   ack_service "ntpclient"
 fi
@@ -90,7 +114,7 @@ if [ -e /etc/config/syslog ] &&
    ( [ $(ps | grep "/sbin/syslogd" | grep -v grep | wc -l) -lt 1 ] ||
      [ $(ps | grep "/sbin/klogd" | grep -v grep | wc -l) -lt 1 ] ); then
   # syslogd/klogd not running
-  restart_service "syslogd" /etc/init.d/S01logging
+  restart_service "syslogd" /etc/init.d/S??logging
 else
   ack_service "syslogd"
 fi
@@ -99,7 +123,7 @@ fi
 if [ $(grep -q "ccu2-ic200" /etc/config/rfd.conf; echo $?) -eq 0 ] &&
    [ $(ps | grep "/lib/udev/udevd" | grep -v grep | wc -l) -lt 1 ]; then
   # udevd is not running anymore
-  restart_service "udevd" /etc/init.d/S10udev
+  restart_service "udevd" /etc/init.d/S??udev
 else
   ack_service "udevd"
 fi
@@ -107,7 +131,7 @@ fi
 # check ifplugd (ALL: /etc/init.d/S45ifplugd)
 if [[ $(ps | grep "/usr/sbin/ifplugd" | grep -v grep | wc -l) -lt 1 ]]; then
   # ifplugd is not running anymore
-  restart_service "ifplugd" /etc/init.d/S45ifplugd
+  restart_service "ifplugd" /etc/init.d/S??ifplugd
 else
   ack_service "ifplugd"
 fi
@@ -115,7 +139,7 @@ fi
 # check for ssdpd / eq3configcmd (CCU2: /etc/init.d/S50eq3configd)
 if [[ $(ps | grep "/bin/ssdpd" | grep -v grep | wc -l) -lt 1 ]]; then
   # ssdpd is not running anymore
-  restart_service "ssdpd" /etc/init.d/S50eq3configd
+  restart_service "ssdpd" /etc/init.d/S??eq3configd
 else
   ack_service "ssdpd"
 fi
@@ -125,7 +149,7 @@ if [[ -e /etc/crRFD.conf ]]; then
   # check HMIPServer (Firmware >= 2.17.15: /etc/init.d/S62HMServer)
   if [[ $(ps | grep "/opt/HMServer/HMIPServer.jar" | grep -v grep | wc -l) -lt 1 ]]; then
     # HMIPServer.jar not running
-    restart_service "HMIPServer" /etc/init.d/S62HMServer
+    restart_service "HMIPServer" /etc/init.d/S??HMServer
   else
     ack_service "HMIPServer"
   fi
@@ -133,7 +157,7 @@ else
   # check HMServer (Firmware < 2.17.15: /etc/init.d/S61HMServer)
   if [[ $(ps | grep "/opt/HMServer/HMServer.jar" | grep -v grep | wc -l) -lt 1 ]]; then
     # HMServer.jar not running
-    restart_service "HMServer" /etc/init.d/S61HMServer
+    restart_service "HMServer" /etc/init.d/S??HMServer
   else
     ack_service "HMServer"
   fi
@@ -143,7 +167,7 @@ fi
 if [ -e /etc/config/multimacd.conf ] &&
    [ $(ps | grep "/bin/multimacd" | grep -v grep | wc -l) -lt 1 ]; then
   # multimacd is not running
-  restart_service "multimacd" /etc/init.d/S60multimacd
+  restart_service "multimacd" /etc/init.d/S??multimacd
 else
   ack_service "multimacd"
 fi
@@ -152,7 +176,7 @@ fi
 if [ -e /etc/lighttpd/lighttpd.conf ] &&
    [ $(ps | grep "/usr/sbin/lighttpd" | grep -v grep | wc -l) -lt 1 ]; then
   # multimacd is not running
-  restart_service "lighttpd" /etc/init.d/S50lighttpd
+  restart_service "lighttpd" /etc/init.d/S??lighttpd
 else
   ack_service "lighttpd"
 fi
@@ -161,7 +185,7 @@ fi
 if [ -e /dev/watchdog ]; then
   if [ $(ps | grep "/dev/watchdog" | grep -v grep | wc -l) -lt 1 ]; then
     # watch is not running
-    restart_service "watchdog" /etc/init.d/S15watchdog
+    restart_service "watchdog" /etc/init.d/S??watchdog
   else
     ack_service "watchdog"
   fi
@@ -179,7 +203,7 @@ fi
 if [ -e /usr/local/addons/cuxd ] &&
    [ $(ps | grep "/usr/local/addons/cuxd/cuxd" | grep -v grep | wc -l) -lt 1 ]; then
   # cuxd is not running
-  restart_service "cuxd" /etc/init.d/S55cuxd
+  restart_service "cuxd" /etc/init.d/S??cuxd
 else
   ack_service "cuxd"
 fi
