@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta charset="ISO-8859-1">
+  <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="settings">
+  <meta name="author" content="mail@jens-maus.de">
+  <meta name="language" content="de, german">
+  <!-- Bootstrap core CSS -->
+  <link href="public/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="public/css/custombootstrap.css" rel="stylesheet">
+  <link href="public/css/custom.css" rel="stylesheet">
+  <title>HM-Watchdog Addon</title>
+</head>
+<body class='body-blu' style="zoom: 1; margin-top: 60px;"> 
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+         <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"  target="_blank"><img src="public/img/logo.png" alt=""> &nbsp;
+ &nbsp;</a>
+      </div>
+   <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav ">
+        <li class="active"><a href="index.html">Über</a></li>
+        <li><a href="settings/logoutput.cgi">Logfile</a></li>
+        <li><a href="settings/settings.cgi">Konfiguration</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="en.index.html">English</a></li>
+      </ul> 
+     </div><!--/.nav-collapse -->
+  </div><!-- class="container" -->
+</div><!-- class="navbar ..." -->
+
+<div class="container center1 col-md-8" id="content"> 
+<legend>Watchdog-basierte CCU Überwachung - hm-watchdog</legend>
+<div class="well well-s">
+<img src="public/img/logo-large.png" align="right">
+<b>Allgemeines</b>
+<p>
+Dieses CCU-Addon implementiert ein Software-Watchdog und prüft somit in regelmäßigen Abständen ob die wichtigsten Dienste einer CCU ausgeführt werden. Falls der sogenannte "Watchdog" hierbei feststellt, dass ein CCU-Dienst nicht mehr laufen sollte (z.B. durch einen Absturz) startet dieser den besagten Dienst automatisch neu und kann auf Wunsch auch hierüber den Nutzer informieren. Sollte jedoch der besagte Dienst dreimal in Folge nicht korrekt gestartet worden sein, so führt der Watchdog einen kompletten automatischen Reboot der CCU durch um die Funktion der CCU dauerhaft sicherzustellen.
+</p>
+<b>Funktionsumfang</b>
+<p>
+<ul>
+<li>überprüft in regelmäßigen Abständen die Funktion folgender CCU-Dienste:</li>
+  <ul>
+  <li>Hauptdienste:</li>
+    <ul>
+    <li>ReGaHss</li>
+    <li>rfd</li>
+    <li>hs485</li>
+    <li>HMServer / HMIPServer</li>
+    </ul>
+  <li>Systemdienste:</li>
+    <ul>
+    <li>lighttpd</li>
+    <li>ifplugd</li>
+    <li>syslogd/klogd</li>
+    <li>ntpclient</li>
+    <li>watchdog</li>
+    <li>CCU2: udevd</li>
+    <li>CCU2: multimacd</li>
+    <li>CCU2: ssdpd</li>
+    </ul>
+  <li>Dritthersteller-Dienste:</li>
+    <ul>
+    <li>CUxD</li>
+    </ul>
+  </ul>
+<li>startet automatisch die CCU neu falls ein Dienst mehr als 3x nicht gestartet werden konnte</li>
+<li>erlaubt das automatische Ausführen eines selbst definierbaren ReGa-Skriptes wenn ein Dienst neugestartet werden musste</li>
+<li>RaspberryMatic: lädt/initialisiert automatisch den fehlenden hardware-Watchdog des RaspberryPi2/3</li>
+</ul>
+</p>
+
+<b>Unterstützte CCU Platformen</b>
+<ul>
+<li>HomeMatic CCU1</li>
+<li><a href="http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html">HomeMatic CCU2</a></li>
+<li><a href="http://homematic-forum.de/forum/viewtopic.php?f=56&t=26917">RaspberryMatic</a></li>
+</ul>
+
+<b>Installation als CCU-Addon</b>
+<ol>
+  <li>Download des aktuellen Addon-Releases von <a href="https://github.com/jens-maus/hm-watchdog/releases">Github</a></li>
+  <li>Installation des Addon-Paketes (<code>hm-watchdog-X.X.tar.gz</code>) mittels WebUI Oberfläche der CCU</li>
+</ol>
+
+<b>Support</b>
+<p>
+Bei Problemen/Bugs oder Ideen zur Weiterentwicklung bitte unter dem Github-Projekt ein Ticket <a href="https://github.com/jens-maus/hm-watchdog/issues">erstellen</a>. Für Hilfe bei der Benutzung/Konfiguration des Addons kann man unter folgendem deutschsprachigen Forumbeitrag hilfe suchen: <a href="http://homematic-forum.de/forum/viewtopic.php?f=18&t=23907">hm-watchdog</a>.
+</p>
+
+<b>Lizenz</b>
+<p>Die Nutzung und Entwicklung des Addons unterliegt der Version 3 der <a href="http://www.gnu.org/licenses/lgpl-3.0.de.html">LGPL Open Source Lizenz.</a></p>
+
+<b>Authoren</b>
+<p>Copyright (c) 2015-2016 Jens Maus &lt;mail@jens-maus.de&gt;</p>
+
+</div>
+</div>
+</body>
+</html>

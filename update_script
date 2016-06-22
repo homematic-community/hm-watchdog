@@ -19,7 +19,16 @@ mkdir -p ${RCD_DIR}
 chmod 755 ${RCD_DIR}
 
 # copy addon (common stuff)
-cp -af watchdog/* ${ADDON_DIR}/
+cp -af common/* ${ADDON_DIR}/
+
+# copy addon (CCU dependent stuff)
+if [ "$1" = "" ]; then
+  cp -af ccu1/* ${ADDON_DIR}/
+elif [ "$1" = "CCU2" ]; then
+  cp -af ccu2/* ${ADDON_DIR}/
+elif [ "$1" == "HM-RASPBERRYMATIC" ]; then
+  cp -af ccurm/* ${ADDON_DIR}/
+fi
 
 # copy startup script
 cp -af rc.d/* ${RCD_DIR}
@@ -28,6 +37,16 @@ cp -af rc.d/* ${RCD_DIR}
 cp -af www ${ADDON_DIR}/
 if [ ! -e ${WWW_DIR} ]; then
   ln -sf ${ADDON_DIR}/www ${WWW_DIR}
+fi
+
+# add menu entry
+touch /usr/local/etc/config/hm_addons.cfg
+${ADDON_DIR}/bin/update_addon hm-watchdog ${ADDON_DIR}/etc/hm-watchdog-addon.cfg
+
+# copy over the default notify.rega_default script
+# in case the user hasn't already an own one
+if [ ! -e ${ADDON_DIR}/etc/notify.rega ]; then
+  cp -af ${ADDON_DIR}/etc/notify.rega_default ${ADDON_DIR}/etc/notify.rega
 fi
 
 # synchronize filesystem before performing a reboot

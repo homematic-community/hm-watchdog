@@ -8,10 +8,13 @@ rm -rf tmp/*
 
 # copy all relevant stuff
 cp -a update_script tmp/
-cp -a watchdog tmp/
 cp -a rc.d tmp/
 cp -a www tmp/
 cp -a VERSION tmp/www/
+cp -a ccu1 tmp/
+cp -a ccu2 tmp/
+cp -a ccurm tmp/
+cp -a common tmp/
 
 # generate archive
 cd tmp

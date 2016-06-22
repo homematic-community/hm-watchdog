@@ -5,14 +5,33 @@ ADDONDIR=/usr/local/addons/${ADDONNAME}
 WWWDIR=/usr/local/etc/config/addons/www/${ADDONNAME}
 RCDDIR=/usr/local/etc/config/rc.d
 
+start() {
+    # add our cronjob definitions so that hm-watchdog is executed
+    # every minute
+    if ! grep -Fq "${ADDONDIR}/bin/hm-watchdog.sh" /usr/local/crontabs/root; then
+      (crontab -l ; echo "*/3 * * * * ${ADDONDIR}/bin/hm-watchdog.sh 2>&1 >/dev/null") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -
+    fi
+}
+
+stop() {
+    # remove all cronjob occurances regarding hm-watchdog
+    (crontab -l) 2>&1 | grep -v "no crontab" | grep -v "${ADDONDIR}/bin/hm-watchdog.sh" | sort | uniq | crontab -
+}
+
 case "$1" in
 
   ""|start)
-    # add our cronjob definitions so that hm-watchdog is executed
-    # every minute
-    if ! grep -Fq "${ADDONDIR}/hm-watchdog.sh" /usr/local/crontabs/root; then
-      (crontab -l ; echo "*/3 * * * * ${ADDONDIR}/hm-watchdog.sh 2>&1 >/dev/null") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -
-    fi
+    start
+    ;;
+
+  stop)
+    stop
+    ;;
+
+  restart|reload)
+    stop
+    sleep 2
+    start
     ;;
 
   info)
@@ -21,13 +40,16 @@ case "$1" in
     echo "Info: <a href='http://github.com/jens-maus/hm-watchdog'>http://github.com/jens-maus/hm-watchdog</a>"
     echo "Version: $(cat ${WWWDIR}/VERSION)"
     echo "Name: hm-watchdog"
-    echo "Operations: uninstall"
+    echo "Operations: uninstall restart"
     echo "Update: /addons/${ADDONNAME}/update-check.cgi"
     ;;
 
   uninstall)
-    # remove all cronjob occurances regarding hm-watchdog
-    (crontab -l) 2>&1 | grep -v "no crontab" | grep -v "${ADDONDIR}/hm-watchdog.sh" | sort | uniq | crontab -
+    # stop the service and deinstall the cronjob
+    stop
+
+    # remove the addon button
+    ${ADDONDIR}/bin/update_addon hm-watchdog
 
     # remove the whole addon related stuff
     rm -rf ${ADDONDIR}
@@ -35,4 +57,11 @@ case "$1" in
     rm -f ${RCDDIR}/${ADDONNAME}
     ;;
 
+  *)
+    echo "Usage: $0 {start|stop|restart|info|uninstall}" >&2
+    exit 1
+    ;;
+
 esac
+
+exit 0

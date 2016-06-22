@@ -1,0 +1,16 @@
+! This rega script will be executed if hm-watchdog
+! wants to notify the user. So in here you could
+! either raise a alarm message or send out an email
+! if the email addon is installed. On execution
+! <NOTIFY_TXT> will be replaced by the real notify message.
+
+! Comment out the following line to send out an email
+!dom.GetObject("CUxD.CUX2801001:1.CMD_EXEC").State("/etc/config/addons/email/email 01 '<NOTIFY_TXT>'");
+
+! Comment out the following line if you have zPNP installed
+!dom.GetObject("CCU SV Push Text").State("<NOTIFY_TXT>");
+!dom.GetObject("CCU PRG Push-Nachrichten").ProgramExecute();
+
+! Raise an alarm message in the CCU
+dom.GetObject("Alarmzone 1").State(true);
+dom.GetObject("Alarmzone 1").DPInfo("<NOTIFY_TXT>");

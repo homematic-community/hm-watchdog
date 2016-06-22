@@ -20,10 +20,10 @@ notify_user()
 
   # check if a rega-based notify script exists and if so we send it to tclrega.exe
   # for execution
-  if [ -e ${ADDONDIR}/notify.rega ]; then
+  if [ -e ${ADDONDIR}/etc/notify.rega ]; then
     # lets load the user configured rega script and replace "${notify_text}" with 
     # the supplied text in this function.
-    postbody=$(cat ${ADDONDIR}/notify.rega | sed -e "s/NOTIFY_TXT/${notify_text}/")
+    postbody=$(cat ${ADDONDIR}/etc/notify.rega | sed -e "s/<NOTIFY_TXT>/${notify_text}/")
     if [ -n "${postbody}" ]; then
       wget -q -O - --post-data "${postbody}" "http://127.0.0.1:8181/tclrega.exe"
     fi
