@@ -43,11 +43,18 @@ fi
 touch /usr/local/etc/config/hm_addons.cfg
 ${ADDON_DIR}/bin/update_addon hm-watchdog ${ADDON_DIR}/etc/hm-watchdog-addon.cfg
 
+# copy over the default hm-watchdog.conf_default config file
+# in case the user hasn't already an own one
+if [ ! -e ${ADDON_DIR}/etc/hm-watchdog.conf ]; then
+  cp -af ${ADDON_DIR}/etc/hm-watchdog.conf_default ${ADDON_DIR}/etc/hm-watchdog.conf
+fi
+
 # copy over the default notify.rega_default script
 # in case the user hasn't already an own one
 if [ ! -e ${ADDON_DIR}/etc/notify.rega ]; then
   cp -af ${ADDON_DIR}/etc/notify.rega_default ${ADDON_DIR}/etc/notify.rega
 fi
+
 
 # synchronize filesystem before performing a reboot
 # afterwards

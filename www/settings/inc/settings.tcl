@@ -83,7 +83,7 @@ proc loadConfigFile { } {
     }
 
     if { [ catch {
-      set HM_WATCHDOG_INTERVAL [exec crontab -l | grep /usr/local/addons/hm-watchdog/bin/hm-watchdog.sh | grep -v grep | cut -f1 -d { } | cut -f2 -d {/}]
+      set HM_WATCHDOG_INTERVAL [exec grep HM_WATCHDOG_INTERVAL /usr/local/addons/hm-watchdog/etc/hm-watchdog.conf | grep -v grep | cut -f2 -d {=}]
     } err ] } {
       set HM_WATCHDOG_INTERVAL "0"
     }
@@ -98,6 +98,11 @@ proc saveConfigFile { } {
     # output the whole content of WATCHDOG_NOTIFY to our notify.rega file
     set fd [open $NOTIFY_REGA w]
     puts $fd $HM_WATCHDOG_NOTIFY
+    close $fd
+
+    # save the interval value to our config file
+    set fd [open /usr/local/addons/hm-watchdog/etc/hm-watchdog.conf w]
+    puts $fd HM_WATCHDOG_INTERVAL=$HM_WATCHDOG_INTERVAL
     close $fd
 
     # we have updated our configuration so lets
