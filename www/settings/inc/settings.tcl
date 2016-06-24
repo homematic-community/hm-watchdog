@@ -105,6 +105,6 @@ proc saveConfigFile { } {
     if { $HM_WATCHDOG_INTERVAL == 0 } { 
       exec /usr/local/etc/config/rc.d/hm-watchdog stop &
     } else {
-      exec /usr/local/etc/config/rc.d/hm-watchdog restart &
+      exec /usr/local/etc/config/rc.d/hm-watchdog restart
     }
 }
