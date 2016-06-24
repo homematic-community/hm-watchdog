@@ -23,7 +23,7 @@ notify_user()
   if [ -e ${ADDONDIR}/etc/notify.rega ]; then
     # lets load the user configured rega script and replace "${notify_text}" with 
     # the supplied text in this function.
-    postbody=$(cat ${ADDONDIR}/etc/notify.rega | sed -e "s/<NOTIFY_TXT>/${notify_text}/")
+    postbody=$(grep -v "^!" ${ADDONDIR}/etc/notify.rega | sed -e "s/<NOTIFY_TXT>/${notify_text}/")
     if [ -n "${postbody}" ]; then
       wget -q -O - --post-data "${postbody}" "http://127.0.0.1:8181/tclrega.exe"
     fi
@@ -54,7 +54,13 @@ restart_service()
     notify_user "hm-watchdog: CCU restarted due to service ${name} down >${MAX_THRESHOLD} times."
 
     /usr/bin/logger -t hm-watchdog -p err "${name} service down for >${MAX_THRESHOLD} iterations. Rebooting CCU" 2>&1 >/dev/null
+
+    # lets wait 5 seconds before we actually reboot to give the notification
+    # the time to send out all information
+    sleep 5
+    sync
     /sbin/reboot
+
     exit 1
   fi
 

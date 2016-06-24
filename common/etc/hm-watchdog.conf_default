@@ -1,0 +1,3 @@
+# the number of minutes hm-watchdog should
+# be regularly executed via cron
+HM_WATCHDOG_INTERVAL=3

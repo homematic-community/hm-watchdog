@@ -97,6 +97,11 @@ proc saveConfigFile { } {
 
     # output the whole content of WATCHDOG_NOTIFY to our notify.rega file
     set fd [open $NOTIFY_REGA w]
+
+    # convert all \r\n (CRLF) to \n (LF) only
+    set HM_WATCHDOG_NOTIFY [string map -nocase { "\r\n" "\n" } $HM_WATCHDOG_NOTIFY]
+
+    # write out the notify script text and close the file
     puts $fd $HM_WATCHDOG_NOTIFY
     close $fd
 
