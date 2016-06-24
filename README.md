@@ -34,7 +34,7 @@ A HomeMatic CCU Addon package implementing a software watchdog functionality to 
 2. Installation of Addon archive (```hm-watchdog-X.X.tar.gz```) via WebUI interface of CCU device
 
 ## Support
-In case of problems/bugs or if you have any feature requests please feel free to open a [new ticket](https://github.com/jens-maus/hm-watchdog/issues) at the Github project pages. To seek for help for configuring/using this Addon please use the following german language based fora thread: [hm-watchdog](http://homematic-forum.de/forum/viewtopic.php?f=XX&t=XXXXXX).
+In case of problems/bugs or if you have any feature requests please feel free to open a [new ticket](https://github.com/jens-maus/hm-watchdog/issues) at the Github project pages. To seek for help for configuring/using this Addon please use the following german language based fora thread: [hm-watchdog](http://homematic-forum.de/forum/viewtopic.php?f=18&t=31581).
 
 ## License
 The use and development of this addon is based on version 3 of the LGPL open source license.
