@@ -45,38 +45,48 @@ ack_service()
 restart_service()
 {
   name=${1}
+  id=${2}
 
-  # now check if this service is down already > MAX_THRESHOLD
-  # and if so we do a reboot instead
-  if [ -f ${STATUS_FILE} ] &&
-     [ $(grep "^${name}" ${STATUS_FILE} | wc -l) -gt ${MAX_THRESHOLD} ]; then
-    # lets notify the user
-    notify_user "hm-watchdog: CCU restarted due to service ${name} down >${MAX_THRESHOLD} times."
-
-    /usr/bin/logger -t hm-watchdog -p err "${name} service down for >${MAX_THRESHOLD} iterations. Rebooting CCU" 2>&1 >/dev/null
-
-    # lets wait 5 seconds before we actually reboot to give the notification
-    # the time to send out all information
-    sleep 5
-    sync
-    /sbin/reboot
-
-    exit 1
+  # check if the caller supplied a specific id
+  if [ -z "${id}" ]; then
+    id=??
   fi
 
-  # restart the service
-  /etc/init.d/S??${name} stop
-  sleep 3
-  /etc/init.d/S??${name} start
+  # check if the service init file exists at all or not
+  if [ -e /etc/init.d/S${id}${name} ]; then
 
-  # lets write down which service actually failed.
-  echo ${name} >>${STATUS_FILE}
+    # now check if this service is down already > MAX_THRESHOLD
+    # and if so we do a reboot instead
+    if [ -f ${STATUS_FILE} ] &&
+       [ $(grep "^${name}" ${STATUS_FILE} | wc -l) -gt ${MAX_THRESHOLD} ]; then
+      # lets notify the user
+      notify_user "hm-watchdog: CCU restarted due to service ${name} down >${MAX_THRESHOLD} times."
 
-  msg=$(/usr/bin/logger -s -t hm-watchdog -p warn "${name} restarted" 2>&1)
-  echo "$(date +'%Y-%m-%d %T') - ${msg}" >>/var/log/hm-watchdog.log
+      /usr/bin/logger -t hm-watchdog -p err "${name} service down for >${MAX_THRESHOLD} iterations. Rebooting CCU" 2>&1 >/dev/null
 
-  # lets notify the user
-  notify_user "hm-watchdog: ${name} restarted"
+      # lets wait 5 seconds before we actually reboot to give the notification
+      # the time to send out all information
+      sleep 5
+      sync
+      /sbin/reboot
+
+      exit 1
+    fi
+
+    # restart the service
+    /etc/init.d/S${id}${name} stop
+    sleep 3
+    /etc/init.d/S${id}${name} start
+
+    # lets write down which service actually failed.
+    echo ${name} >>${STATUS_FILE}
+
+    msg=$(/usr/bin/logger -s -t hm-watchdog -p warn "${name} restarted" 2>&1)
+    echo "$(date +'%Y-%m-%d %T') - ${msg}" >>/var/log/hm-watchdog.log
+
+    # lets notify the user
+    notify_user "hm-watchdog: ${name} restarted"
+  fi
 }
 
 # check for the ReGaHss beast (ALL: /etc/init.d/S70ReGaHss)
@@ -96,13 +106,13 @@ else
   ack_service "rfd"
 fi
 
-# check hs485d (ALL: /etc/init.d/S49hs485d)
+# check hs485d (ALL: /etc/init.d/S60hs485d)
 if [ -e /etc/config/hs485d.conf ] &&
    [ $(ps | grep "bin/hs485d " | grep -v grep | wc -l) -lt 1 ]; then
   # hs485d is not running, restart it
-  restart_service "hs485"
+  restart_service "hs485d" 60
 else
-  ack_service "hs485"
+  ack_service "hs485d"
 fi
 
 # check ntpclient (ALL: /etc/init.d/S50SetClock)
@@ -125,7 +135,7 @@ else
 fi
 
 # check udevd (CCU2: /etc/init.d/S10udev)
-if [ $(grep -q "ccu2-ic200" /etc/config/rfd.conf; echo $?) -eq 0 ] &&
+if [ -e /lib/udev/udevd ] &&
    [ $(ps | grep "/lib/udev/udevd" | grep -v grep | wc -l) -lt 1 ]; then
   # udevd is not running anymore
   restart_service "udev"
@@ -134,7 +144,7 @@ else
 fi
 
 # check ifplugd (ALL: /etc/init.d/S45ifplugd)
-if [[ $(ps | grep "/usr/sbin/ifplugd" | grep -v grep | wc -l) -lt 1 ]]; then
+if [ $(ps | grep "/usr/sbin/ifplugd" | grep -v grep | wc -l) -lt 1 ]; then
   # ifplugd is not running anymore
   restart_service "ifplugd"
 else
@@ -142,7 +152,7 @@ else
 fi
 
 # check for ssdpd / eq3configcmd (CCU2: /etc/init.d/S50eq3configd)
-if [[ $(ps | grep "/bin/ssdpd" | grep -v grep | wc -l) -lt 1 ]]; then
+if [ $(ps | grep "/bin/ssdpd" | grep -v grep | wc -l) -lt 1 ]; then
   # ssdpd is not running anymore
   restart_service "eq3configd"
 else
@@ -150,7 +160,7 @@ else
 fi
 
 # check for HMIPServer (Firmware >= 2.17.15) or HMServer
-if [[ $(ps | grep -E "/opt/HMServer/HMI?P?Server\.jar" | grep -v grep | wc -l) -lt 1 ]]; then
+if [ $(ps | grep -E "/opt/HMServer/HMI?P?Server\.jar" | grep -v grep | wc -l) -lt 1 ]; then
   # HMServer.jar not running
   restart_service "HMServer"
 else
