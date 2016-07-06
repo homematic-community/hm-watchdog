@@ -98,7 +98,7 @@ else
 fi
 
 # check rfd to run properly (ALL: /etc/init.d/S60rfd)
-if [ -e /etc/config/rfd.conf ] &&
+if grep -q BidCos-RF /etc/config/InterfacesList.xml &&
    [ $(ps | grep "/bin/rfd " | grep -v grep | wc -l) -lt 1 ]; then
   # rfd is not running, restart it
   restart_service "rfd"
@@ -107,7 +107,7 @@ else
 fi
 
 # check hs485d (ALL: /etc/init.d/S60hs485d)
-if [ -e /etc/config/hs485d.conf ] &&
+if grep -q BidCos-Wired /etc/config/InterfacesList.xml &&
    [ $(ps | grep "bin/hs485d " | grep -v grep | wc -l) -lt 1 ]; then
   # hs485d is not running, restart it
   restart_service "hs485d" 60
