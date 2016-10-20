@@ -1,5 +1,9 @@
 ## Software Watchdog CCU Addon – hm-watchdog
 <img src="https://github.com/jens-maus/hm-watchdog/raw/master/www/public/img/logo-large.png" align=right>
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+[![License](http://img.shields.io/:license-lgpl3-blue.svg?style=flat)](http://www.gnu.org/licenses/lgpl-3.0.html)
+[![Github Issues](http://githubbadges.herokuapp.com/jens-maus/hm-watchdog/issues.svg)](https://github.com/jens-maus/hm-watchdog/issues)
+
 A HomeMatic CCU Addon package implementing a software watchdog functionality to monitor all important services a CCU devices requires to function correctly. As soon as the watchdog recognizes a service to be down it will try to restart the service. If a service couldn't be restarted three times in a row the software watchdog will also automatically reboot the CCU device. Furthermore, the watchdog will use the standard CCU notification system to notify the administrator of services that were found to be non-working
 
 ## Features
