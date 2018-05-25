@@ -48,7 +48,7 @@ case "$1" in
 
   info)
     echo "Info: <b>Watchdog Addon</b><br>"
-    echo "Info: (c) 2015-2016 Jens Maus<br>"
+    echo "Info: (c) 2015-2018 Jens Maus<br>"
     echo "Info: <a href='http://github.com/jens-maus/hm-watchdog'>http://github.com/jens-maus/hm-watchdog</a>"
     echo "Version: $(cat ${WWWDIR}/VERSION)"
     echo "Name: hm-watchdog"

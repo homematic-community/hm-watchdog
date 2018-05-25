@@ -12,5 +12,7 @@
 !dom.GetObject("CCU PRG Push-Nachrichten").ProgramExecute();
 
 ! Raise an alarm message in the CCU
-dom.GetObject("Alarmzone 1").State(true);
-dom.GetObject("Alarmzone 1").DPInfo("<NOTIFY_TXT>");
+object alarm = dom.GetObject(ID_SYSTEM_VARIABLES).Get("${sysVarAlarmZone1}");
+if(alarm == null) { alarm = dom.GetObject(ID_SYSTEM_VARIABLES).Get("Alarmzone 1"); }
+alarm.State(true);
+alarm.DPInfo("<NOTIFY_TXT>");

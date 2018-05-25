@@ -14,27 +14,33 @@ A HomeMatic CCU Addon package implementing a software watchdog functionality to 
   - primary services:
     * ReGaHss
     * rfd
-    * hs485
-    * HMServer / HMIPServer
+    * hs485d
+    * HMIPServer
+    * mutimacd
+    * ssdpd
+    * eq3configd
   - secondary services:
     * lighttpd
     * ifplugd
-    * syslogd/klogd
-    * ntpclient
+    * syslogd / klogd
+    * ntpclient / ntpd
     * watchdog
-    * CCU2: udevd
-    * CCU2: mutimacd
-    * CCU2: ssdpd
+    * udevd
+    * sshd
+    * crond
+    * RaspberryMatic: rngd
+    * RaspberryMatic: irqbalance
+    * RaspberryMatic: dbus
+    * RaspberryMatic: snmpd
   - third-party services:
     * CUxD
 * automatically reboots CCU device if one of the services failed 3 times in a row
 * automatically executes a ReGa script if one of the services had to be restarted
-* RaspberryMatic: automatically loads/initializes hardware watchdog device kernel module
 
 ## Supported CCU models
-* HomeMatic CCU1
-* [HomeMatic CCU2](http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
 * [RaspberryMatic](http://homematic-forum.de/forum/viewtopic.php?f=56&t=26917)
+* [HomeMatic CCU2](http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
+* HomeMatic CCU1 (experimental)
 
 ## Installation
 1. Download of recent Addon-Release from [Github](https://github.com/jens-maus/hm-watchdog/releases)
@@ -47,4 +53,4 @@ In case of problems/bugs or if you have any feature requests please feel free to
 The use and development of this addon is based on version 3 of the LGPL open source license.
 
 ## Authors
-Copyright (c) 2015-2016 Jens Maus &lt;mail@jens-maus.de&gt;
+Copyright (c) 2015-2018 Jens Maus &lt;mail@jens-maus.de&gt;

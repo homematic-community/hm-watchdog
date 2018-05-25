@@ -59,19 +59,25 @@ Dieses CCU-Addon implementiert ein Software-Watchdog und prüft somit in regelmäß
     <ul>
     <li>ReGaHss</li>
     <li>rfd</li>
-    <li>hs485</li>
-    <li>HMServer / HMIPServer</li>
+    <li>hs485d</li>
+    <li>HMIPServer</li>
+    <li>multimacd</li>
+    <li>ssdpd</li>
+    <li>eq3configd</li>
     </ul>
   <li>Systemdienste:</li>
     <ul>
     <li>lighttpd</li>
     <li>ifplugd</li>
-    <li>syslogd/klogd</li>
-    <li>ntpclient</li>
+    <li>syslogd / klogd</li>
+    <li>ntpclient / ntpd</li>
     <li>watchdog</li>
-    <li>CCU2: udevd</li>
-    <li>CCU2: multimacd</li>
-    <li>CCU2: ssdpd</li>
+    <li>udevd</li>
+    <li>ssdpd</li>
+    <li>RaspberryMatic: rngd</li>
+    <li>RaspberryMatic: irqbalance</li>
+    <li>RaspberryMatic: dbus</li>
+    <li>RaspberryMatic: snmpd</li>
     </ul>
   <li>Dritthersteller-Dienste:</li>
     <ul>
@@ -80,15 +86,14 @@ Dieses CCU-Addon implementiert ein Software-Watchdog und prüft somit in regelmäß
   </ul>
 <li>startet automatisch die CCU neu falls ein Dienst mehr als 3x nicht gestartet werden konnte</li>
 <li>erlaubt das automatische Ausführen eines selbst definierbaren ReGa-Skriptes wenn ein Dienst neugestartet werden musste</li>
-<li>RaspberryMatic: lädt/initialisiert automatisch den fehlenden hardware-Watchdog des RaspberryPi2/3</li>
 </ul>
 </p>
 
 <b>Unterstützte CCU Platformen</b>
 <ul>
-<li>HomeMatic CCU1</li>
-<li><a href="http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html">HomeMatic CCU2</a></li>
 <li><a href="http://homematic-forum.de/forum/viewtopic.php?f=56&t=26917">RaspberryMatic</a></li>
+<li><a href="http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html">HomeMatic CCU2</a></li>
+<li>HomeMatic CCU1 (experimental)</li>
 </ul>
 
 <b>Installation als CCU-Addon</b>
@@ -106,7 +111,7 @@ Bei Problemen/Bugs oder Ideen zur Weiterentwicklung bitte unter dem Github-Proje
 <p>Die Nutzung und Entwicklung des Addons unterliegt der Version 3 der <a href="http://www.gnu.org/licenses/lgpl-3.0.de.html">LGPL Open Source Lizenz.</a></p>
 
 <b>Authoren</b>
-<p>Copyright (c) 2015-2016 Jens Maus &lt;mail@jens-maus.de&gt;</p>
+<p>Copyright (c) 2015-2018 Jens Maus &lt;mail@jens-maus.de&gt;</p>
 
 </div>
 </div>
