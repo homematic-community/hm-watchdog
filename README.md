@@ -4,7 +4,7 @@
 [![Release](https://img.shields.io/github/release/jens-maus/hm-watchdog.svg)](https://github.com/jens-maus/hm-watchdog/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/hm-watchdog/latest/total.svg)](https://github.com/jens-maus/hm-watchdog/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/hm-watchdog.svg)](https://github.com/jens-maus/hm-watchdog/issues)
-[![License](http://img.shields.io/:license-lgpl3-blue.svg?style=flat)](http://www.gnu.org/licenses/lgpl-3.0.html)
+![License](https://img.shields.io/github/license/jens-maus/hm-watchdog.svg?style=flat-square)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
 A HomeMatic CCU Addon package implementing a software watchdog functionality to monitor all important services a CCU devices requires to function correctly. As soon as the watchdog recognizes a service to be down it will try to restart the service. If a service couldn't be restarted three times in a row the software watchdog will also automatically reboot the CCU device. Furthermore, the watchdog will use the standard CCU notification system to notify the administrator of services that were found to be non-working
@@ -50,7 +50,7 @@ A HomeMatic CCU Addon package implementing a software watchdog functionality to 
 In case of problems/bugs or if you have any feature requests please feel free to open a [new ticket](https://github.com/jens-maus/hm-watchdog/issues) at the Github project pages. To seek for help for configuring/using this Addon please use the following german language based fora thread: [hm-watchdog](http://homematic-forum.de/forum/viewtopic.php?f=18&t=31581).
 
 ## License
-The use and development of this addon is based on version 3 of the LGPL open source license.
+The use and development of this addon is licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
 
 ## Authors
 Copyright (c) 2015-2018 Jens Maus &lt;mail@jens-maus.de&gt;
