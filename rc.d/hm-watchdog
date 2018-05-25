@@ -7,7 +7,7 @@ RCDDIR=/usr/local/etc/config/rc.d
 
 start() {
     # lets source in the config
-    if [ -e ${ADDONDIR}/etc/hm-watchdog.conf ]; then
+    if [[ -e ${ADDONDIR}/etc/hm-watchdog.conf ]]; then
       source ${ADDONDIR}/etc/hm-watchdog.conf
     else
       HM_WATCHDOG_INTERVAL=3
@@ -15,9 +15,9 @@ start() {
 
     # add or remove our cronjob definitions so that hm-watchdog is executed
     # every three minutes
-    if [ $HM_WATCHDOG_INTERVAL -gt 0 ]; then
+    if [[ $HM_WATCHDOG_INTERVAL -gt 0 ]]; then
       if ! grep -Fq "${ADDONDIR}/bin/hm-watchdog.sh" /usr/local/crontabs/root; then
-        (crontab -l ; echo "*/${HM_WATCHDOG_INTERVAL} * * * * ${ADDONDIR}/bin/hm-watchdog.sh 2>&1 >/dev/null") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -
+        (crontab -l ; echo "*/${HM_WATCHDOG_INTERVAL} * * * * ${ADDONDIR}/bin/hm-watchdog.sh >/dev/null 2>/dev/null") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -
       fi
     else
       # remove all cronjob occurances regarding hm-watchdog
