@@ -1,11 +1,11 @@
 ## Software Watchdog CCU Addon – hm-watchdog
 <img src="https://github.com/jens-maus/hm-watchdog/raw/master/www/public/img/logo-large.png" align=right>
 
-[![Release](https://img.shields.io/github/release/jens-maus/hm-watchdog.svg)](https://github.com/jens-maus/hm-watchdog/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/jens-maus/hm-watchdog/latest/total.svg)](https://github.com/jens-maus/hm-watchdog/releases/latest)
-[![Issues](https://img.shields.io/github/issues/jens-maus/hm-watchdog.svg)](https://github.com/jens-maus/hm-watchdog/issues)
+[![Current Release](https://img.shields.io/github/release/jens-maus/hm-watchdog.svg?style=flat-square)](https://github.com/jens-maus/hm-watchdog/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/jens-maus/hm-watchdog/latest/total.svg?style=flat-square)](https://github.com/jens-maus/Rhm-watchdog/releases/latest)
+[![Issues](https://img.shields.io/github/issues/jens-maus/hm-watchdog.svg?style=flat-square)](https://github.com/jens-maus/hm-watchdog/issues)
 ![License](https://img.shields.io/github/license/jens-maus/hm-watchdog.svg?style=flat-square)
-[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
 A HomeMatic CCU Addon package implementing a software watchdog functionality to monitor all important services a CCU devices requires to function correctly. As soon as the watchdog recognizes a service to be down it will try to restart the service. If a service couldn't be restarted three times in a row the software watchdog will also automatically reboot the CCU device. Furthermore, the watchdog will use the standard CCU notification system to notify the administrator of services that were found to be non-working
 
