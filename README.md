@@ -38,9 +38,9 @@ A HomeMatic CCU Addon package implementing a software watchdog functionality to 
 * automatically executes a ReGa script if one of the services had to be restarted
 
 ## Supported CCU models
-* [RaspberryMatic](http://homematic-forum.de/forum/viewtopic.php?f=56&t=26917)
-* [HomeMatic CCU2](http://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
-* HomeMatic CCU1 (experimental)
+* [HomeMatic CCU3](https://www.eq-3.de/produkte/homematic/zentralen-und-gateways/smart-home-zentrale-ccu3.html) / [RaspberryMatic](http://raspberrymatic.de/)
+* [HomeMatic CCU2](https://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
+* HomeMatic CCU1
 
 ## Installation
 1. Download of recent Addon-Release from [Github](https://github.com/jens-maus/hm-watchdog/releases)
