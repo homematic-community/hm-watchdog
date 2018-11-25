@@ -28,10 +28,10 @@ A HomeMatic CCU Addon package implementing a software watchdog functionality to 
     * udevd
     * sshd
     * crond
-    * RaspberryMatic: rngd
-    * RaspberryMatic: irqbalance
-    * RaspberryMatic: dbus
-    * RaspberryMatic: snmpd
+    * CCU3/RaspberryMatic: rngd
+    * CCU3/RaspberryMatic: irqbalance
+    * CCU3/RaspberryMatic: dbus
+    * CCU3/RaspberryMatic: snmpd
   - third-party services:
     * CUxD
 * automatically reboots CCU device if one of the services failed 3 times in a row

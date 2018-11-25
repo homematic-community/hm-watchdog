@@ -132,19 +132,19 @@ fi
 # check udevd (ALL: /etc/init.d/S10udev)
 check_service "udev" "udevd"
 
-# check irqbalance (RaspberryMatic: /etc/init.d/S13irqbalance)
+# check irqbalance (CCU3/RaspberryMatic: /etc/init.d/S13irqbalance)
 check_service "irqbalance"
 
-# check rngd (RaspberryMatic: /etc/init.d/S21rngd)
+# check rngd (CCU3/RaspberryMatic: /etc/init.d/S21rngd)
 check_service "rngd"
 
-# check dbus (RaspberryMatic: /etc/init.d/S30dbus)
+# check dbus (CCU3/RaspberryMatic: /etc/init.d/S30dbus)
 check_service "dbus"
 
 # check ifplugd (ALL: /etc/init.d/S45ifplugd)
 check_service "ifplugd"
 
-# check ntpd (RaspberryMatic: /etc/init.d/S48ntp)
+# check ntpd (CCU3/RaspberryMatic: /etc/init.d/S48ntp)
 if [[ -x /etc/init.d/S??ntp ]] &&
    [[ -e /etc/config/ntpclient ]] && [[ -e /var/status/hasNTP ]]; then
   check_service "ntp" "ntpd"
@@ -156,7 +156,7 @@ if [[ -x /etc/init.d/S??SetClock ]] &&
   check_service "SetClock" "ntpclient"
 fi
 
-# check for ssdpd (RaspberryMatic: /etc/init.d/S50ssdpd)
+# check for ssdpd (CCU3/RaspberryMatic: /etc/init.d/S50ssdpd)
 check_service "ssdpd"
 
 # check for eq3configd (ALL: /etc/init.d/S50eq3configd)
@@ -178,8 +178,10 @@ fi
 # check CUxD (if present: /etc/init.d/S55cuxd)
 check_service "cuxd"
 
-# check snmpd (RaspberryMatic: /etc/init.d/S59snmpd)
-check_service "snmpd"
+# check snmpd (CCU3/RaspberryMatic: /etc/init.d/S59snmpd)
+if [[ -e /etc/config/snmp/snmpd-ccu3.conf ]]; then
+  check_service "snmpd"
+fi
 
 # check hs485d (ALL: /etc/init.d/S60hs485d)
 if grep -q BidCos-Wired /etc/config/InterfacesList.xml; then
@@ -207,5 +209,5 @@ fi
 # check for the ReGaHss (ALL: /etc/init.d/S70ReGaHss)
 check_service "ReGaHss"
 
-# check crond (RaspberryMatic: /etc/init.d/S71crond)
+# check crond (CCU3/RaspberryMatic: /etc/init.d/S71crond)
 check_service "crond"
