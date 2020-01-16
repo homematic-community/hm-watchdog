@@ -28,19 +28,22 @@ A HomeMatic CCU Addon package implementing a software watchdog functionality to 
     * udevd
     * sshd
     * crond
-    * CCU3/RaspberryMatic: rngd
-    * CCU3/RaspberryMatic: irqbalance
-    * CCU3/RaspberryMatic: dbus
-    * CCU3/RaspberryMatic: snmpd
+    * CCU3: rngd
+    * CCU3: irqbalance
+    * CCU3: dbus
+    * CCU3: snmpd
   - third-party services:
     * CUxD
 * automatically reboots CCU device if one of the services failed 3 times in a row
 * automatically executes a ReGa script if one of the services had to be restarted
 
 ## Supported CCU models
-* [HomeMatic CCU3](https://www.eq-3.de/produkte/homematic/zentralen-und-gateways/smart-home-zentrale-ccu3.html) / [RaspberryMatic](http://raspberrymatic.de/)
+* [HomeMatic CCU3](https://www.eq-3.de/produkte/homematic/zentralen-und-gateways/smart-home-zentrale-ccu3.html)
 * [HomeMatic CCU2](https://www.eq-3.de/produkt-detail-zentralen-und-gateways/items/homematic-zentrale-ccu-2.html)
 * HomeMatic CCU1
+
+**WARNING:**
+Please note that the use of this Addon with RaspberryMatic is **NOT** required anymore and discouraged/not adviced anymore since it will otherwise cause problems!
 
 ## Installation
 1. Download of recent Addon-Release from [Github](https://github.com/jens-maus/hm-watchdog/releases)
@@ -53,4 +56,4 @@ In case of problems/bugs or if you have any feature requests please feel free to
 The use and development of this addon is licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
 
 ## Authors
-Copyright (c) 2015-2018 Jens Maus &lt;mail@jens-maus.de&gt;
+Copyright (c) 2015-2020 Jens Maus &lt;mail@jens-maus.de&gt;
