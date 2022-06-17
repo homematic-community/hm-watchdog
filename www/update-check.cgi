@@ -1,14 +1,15 @@
 #!/bin/tclsh
 
-set checkURL    "https://raw.githubusercontent.com/jens-maus/hm-watchdog/master/VERSION"
-set downloadURL "https://github.com/jens-maus/hm-watchdog/releases/latest"
+set checkURL    "https://raw.githubusercontent.com/homematic-community/hm-watchdog/master/VERSION"
+set downloadURL "https://github.com/homematic-community/hm-watchdog/releases"
 
 catch {
   set input $env(QUERY_STRING)
   set pairs [split $input &]
   foreach pair $pairs {
-    if {0 != [regexp "^(\[^=]*)=(.*)$" $pair dummy varname val]} {
-      set $varname $val
+    if {$pair == "cmd=download"} {
+      set cmd "download"
+      break
     }
   }
 }
